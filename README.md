@@ -2,7 +2,7 @@
 
 A strategic two-player grid-based escape game built with Pygame.
 
-[![Build Executables](https://github.com/YOUR_USERNAME/grid-escape-game/actions/workflows/build-executables.yml/badge.svg)](https://github.com/YOUR_USERNAME/grid-escape-game/actions/workflows/build-executables.yml)
+[![Build Executables](https://github.com/egemertgulderen/grid-escape-game/actions/workflows/build-executables.yml/badge.svg)](https://github.com/egemertgulderen/grid-escape-game/actions/workflows/build-executables.yml)
 
 ## 🎯 Game Overview
 
@@ -38,9 +38,9 @@ Grid Escape is a turn-based strategy game where two players compete to move thei
 
 Download the latest version for your system:
 
-- **Windows**: [GridEscape-Windows.exe](https://github.com/YOUR_USERNAME/grid-escape-game/releases/latest/download/GridEscape-Windows.exe)
-- **macOS**: [GridEscape-macOS](https://github.com/YOUR_USERNAME/grid-escape-game/releases/latest/download/GridEscape-macOS)
-- **Linux**: [GridEscape-Linux](https://github.com/YOUR_USERNAME/grid-escape-game/releases/latest/download/GridEscape-Linux)
+- **Windows**: [GridEscape-Windows.exe](https://github.com/egemertgulderen/grid-escape-game/releases/latest/download/GridEscape-Windows.exe)
+- **macOS**: [GridEscape-macOS](https://github.com/egemertgulderen/grid-escape-game/releases/latest/download/GridEscape-macOS)
+- **Linux**: [GridEscape-Linux](https://github.com/egemertgulderen/grid-escape-game/releases/latest/download/GridEscape-Linux)
 
 ### How to Run:
 - **Windows**: Double-click the `.exe` file
