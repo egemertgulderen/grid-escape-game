@@ -1,0 +1,105 @@
+name: Build Grid Escape Executables
+
+on:
+  push:
+    branches: [ main, master ]
+    tags: [ 'v*' ]
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        include:
+          - os: windows-latest
+            name: Windows
+            extension: .exe
+          - os: macos-latest
+            name: macOS
+            extension: ""
+          - os: ubuntu-latest
+            name: Linux
+            extension: ""
+        
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+        
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install pygame pyinstaller
+        
+    - name: Build executable
+      run: |
+        pyinstaller --onefile --windowed --name GridEscape-${{ matrix.name }} pygame_grid_escape/main.py
+        
+    - name: Rename executable (Windows)
+      if: matrix.os == 'windows-latest'
+      run: |
+        move dist\GridEscape-Windows.exe dist\GridEscape-Windows.exe
+        
+    - name: Make executable (Unix)
+      if: matrix.os != 'windows-latest'
+      run: |
+        chmod +x dist/GridEscape-${{ matrix.name }}
+        
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: GridEscape-${{ matrix.name }}
+        path: dist/GridEscape-${{ matrix.name }}${{ matrix.extension }}
+        
+    - name: Create release assets
+      if: startsWith(github.ref, 'refs/tags/')
+      uses: actions/upload-artifact@v4
+      with:
+        name: release-${{ matrix.name }}
+        path: dist/GridEscape-${{ matrix.name }}${{ matrix.extension }}
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/')
+    
+    steps:
+    - name: Download all artifacts
+      uses: actions/download-artifact@v4
+      
+    - name: Create Release
+      uses: softprops/action-gh-release@v1
+      with:
+        files: |
+          release-Windows/GridEscape-Windows.exe
+          release-macOS/GridEscape-macOS
+          release-Linux/GridEscape-Linux
+        body: |
+          ## Grid Escape Game Release
+          
+          Download the appropriate version for your operating system:
+          
+          - **Windows**: GridEscape-Windows.exe
+          - **macOS**: GridEscape-macOS
+          - **Linux**: GridEscape-Linux
+          
+          ### How to Run:
+          - **Windows**: Double-click the .exe file
+          - **macOS**: Double-click the file (you may need to right-click and select "Open" first)
+          - **Linux**: Make executable with `chmod +x GridEscape-Linux` then run `./GridEscape-Linux`
+          
+          ### Game Instructions:
+          - Blue player starts from bottom, moves up
+          - Red player starts from right, moves left
+          - Click to place/move pawns
+          - Click again on pawns at exit points to escape them
+          - First to escape all pawns wins!
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
